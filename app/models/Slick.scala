@@ -6,6 +6,18 @@ import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
 import models._
 
+
+case class UserAuthResponse(userID: java.util.UUID,
+                            emailAddress: String,
+                            password: String,
+                            active: Boolean,
+                            realName: String,
+                            lastLogin: Option[java.sql.Timestamp],
+                            failedLoginAttempts: Int,
+                            loginDisallowedUntil: Option[java.sql.Timestamp],
+                            isPrimaryEmailAddress: Boolean,
+                            emailAddressVerified: Boolean)
+
 object schema {
 
   object LoginByEmailAddress extends Table[(java.util.UUID, String, String,
