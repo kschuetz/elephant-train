@@ -7,16 +7,7 @@ import play.api.db.slick.Config.driver.simple._
 import models._
 
 
-case class UserAuthResponse(userID: java.util.UUID,
-                            emailAddress: String,
-                            password: String,
-                            active: Boolean,
-                            realName: String,
-                            lastLogin: Option[java.sql.Timestamp],
-                            failedLoginAttempts: Int,
-                            loginDisallowedUntil: Option[java.sql.Timestamp],
-                            isPrimaryEmailAddress: Boolean,
-                            emailAddressVerified: Boolean)
+
 
 object schema {
 
@@ -52,5 +43,8 @@ object SlickLoginDAO {
 
   def updateSuccessForUser(userID: java.util.UUID,
                            loginTime: Option[java.sql.Timestamp]) = ???
+
+
+  def userLoginByEmailAddress(emailAddress: String): Option[UserAuthResponse] = ???
 
 }
