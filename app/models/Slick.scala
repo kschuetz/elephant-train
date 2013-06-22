@@ -27,5 +27,18 @@ object schema {
             login_disallowed_until ~ is_primary_email_address ~ email_address_verified
   }
 
+}
+
+
+object SlickLoginDAO {
+
+  import schema._
+
+  def updateThrottlingForUser(userID: java.util.UUID,
+                              failedAttempts: Int,
+                              loginDisallowedUntil: Option[java.sql.Timestamp]) = ???
+
+  def updateSuccessForUser(userID: java.util.UUID,
+                           loginTime: Option[java.sql.Timestamp]) = ???
 
 }
