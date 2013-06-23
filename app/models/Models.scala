@@ -11,3 +11,6 @@ case class UserAuthResponse(userID: java.util.UUID,
                             loginDisallowedUntil: Option[java.sql.Timestamp],
                             isPrimaryEmailAddress: Boolean,
                             emailAddressVerified: Boolean)
+
+
+case class AuthenticatedUser(userID: java.util.UUID)
