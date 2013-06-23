@@ -62,7 +62,7 @@ object Application extends Controller {
 
         authInfo match {
           case Some(info) => {
-            if(isThrottled(info)) Ok("throttled")
+            if(isThrottled(info)) Redirect(routes.Application.login).flashing("error" -> "throttled")
             else {
               if(checkPassword(credentials._2, info.password)) {
                 loginDAO.updateSuccessForUser(info.userID, Some(loginTime))
@@ -71,11 +71,11 @@ object Application extends Controller {
                 val failedAttempts = info.failedLoginAttempts + 1
                 val throttleUntil = getThrottleTime(failedAttempts)
                 loginDAO.updateThrottlingForUser(info.userID, failedAttempts, throttleUntil)
-                Ok("no way")
+                Redirect(routes.Application.login).flashing("error" -> "NO WAY")
               }
             }
           }
-          case _ => Ok("nope")
+          case _ => Redirect(routes.Application.login).flashing("error" -> "nope")
         }
       }
 
