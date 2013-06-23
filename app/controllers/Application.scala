@@ -17,7 +17,8 @@ object Application extends Controller with Secured {
   val loginForm = Form(
     tuple(
       "email" -> text,
-      "password" -> text
+      "password" -> text,
+      "remember" -> boolean
     )
   )
 
