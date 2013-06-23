@@ -45,6 +45,24 @@ object SlickLoginDAO {
                            loginTime: Option[java.sql.Timestamp]) = ???
 
 
-  def userLoginByEmailAddress(emailAddress: String): Option[UserAuthResponse] = ???
+  private val emailQuery = for {
+    email <- Parameters[String]
+    user <- LoginByEmailAddress if user.email_address === email
+  } yield (user.user_id, user.password, user.active, user.real_name,
+           user.failed_login_attempts, user.login_disallowed_until,
+           user.is_primary_email_address, user.email_address_verified)
+
+  def userLoginByEmailAddress(emailAddress: String): Option[UserAuthResponse] = DB.withSession { implicit c =>
+    val normalizedEmail = emailAddress.toLowerCase
+
+    emailQuery(normalizedEmail).firstOption.map { row =>
+      UserAuthResponse(row._1, normalizedEmail, row._2, row._3,
+                       row._4, None, row._5, row._6, row._7, row._8)
+
+    }
+
+
+
+  }
 
 }
