@@ -24,7 +24,23 @@ object Application extends Controller {
     Ok(views.html.main("Login")(views.html.login(loginForm)))
   }
 
-  def authenticate = TODO
+  def authenticate = Action { implicit request =>
+    loginForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.main("Login")(views.html.login(formWithErrors))),
+      credentials => {
+        val authInfo = loginDAO.userLoginByEmailAddress(credentials._1)
+
+        authInfo match {
+          case Some(info) => Ok("hello " + info.emailAddress)
+          case _ => Ok("nope")
+        }
+      }
+
+    )
+
+  }
+
+
   def logout = TODO
 
 
