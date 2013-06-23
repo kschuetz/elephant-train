@@ -34,6 +34,19 @@ object Application extends Controller {
       info.loginDisallowedUntil.map { loginTime.before(_) } getOrElse(false)
     }
 
+    def getThrottleTime(failedAttempts: Int): Option[java.sql.Timestamp] = {
+      if(failedAttempts < 1) None
+      else {
+        val interval = failedAttempts match {
+          case 1 => 5
+          case 2 => 15
+          case _ => 45
+        }
+
+        None
+      }
+    }
+
     def checkPassword(passwordIn: String, password: String): Boolean = {
       import com.github.t3hnar.bcrypt._
       passwordIn.isBcrypted(password)
@@ -52,7 +65,10 @@ object Application extends Controller {
                 loginDAO.updateSuccessForUser(info.userID, Some(loginTime))
                 Ok("hello " + info.emailAddress)
               } else {
-                Ok("bad password")
+                val failedAttempts = info.failedLoginAttempts + 1
+                val throttleUntil = getThrottleTime(failedAttempts)
+                loginDAO.updateThrottlingForUser(info.userID, failedAttempts, throttleUntil)
+                Ok("no way")
               }
             }
           }
