@@ -42,7 +42,14 @@ object SlickLoginDAO {
                               loginDisallowedUntil: Option[java.sql.Timestamp]) = ???
 
   def updateSuccessForUser(userID: java.util.UUID,
-                           loginTime: Option[java.sql.Timestamp]) = ???
+                           loginTime: Option[java.sql.Timestamp]) = DB.withSession { implicit c =>
+    val q = for {
+      user <- LoginByEmailAddress if user.user_id is userID
+    } yield user.last_login ~ user.failed_login_attempts ~ user.login_disallowed_until
+
+    q.update((loginTime, 0, None))
+
+  }
 
 
   private val emailQuery = for {
