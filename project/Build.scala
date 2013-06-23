@@ -15,7 +15,8 @@ object ApplicationBuild extends Build {
     "com.typesafe.play" %% "play-slick" % "0.3.2",
     "net.debasishg" %% "redisclient" % "2.10",
     "commons-codec" % "commons-codec" % "1.4",
-    "com.github.t3hnar" % "scala-bcrypt_2.10" % "2.2"
+    "com.github.t3hnar" % "scala-bcrypt_2.10" % "2.2",
+    "com.github.nscala-time" %% "nscala-time" % "0.4.2"
   )
 
 
