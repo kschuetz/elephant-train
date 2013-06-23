@@ -22,14 +22,14 @@ object Application extends Controller {
   )
 
   def login = Action { implicit request =>
-    Ok(views.html.main("Login")(views.html.login(loginForm)))
+    Ok(views.html.main("Login")(views.html.login(loginForm))).withSession("foo" -> "bar", "qwerty" -> "quux")
   }
 
   def authenticate = Action { implicit request =>
 
     import com.github.nscala_time.time.Imports._
 
-    val invalidLoginErrorMessage = "Invalid email address or password"
+    val invalidLoginErrorMessage = "Invalid user name or password"
 
     val now = DateTime.now
     val loginTime = new java.sql.Timestamp(now.getMillis)
@@ -82,7 +82,7 @@ object Application extends Controller {
 
         checkAuth match {
           case Left(errorMsg) => Redirect(routes.Application.login).flashing("error" -> errorMsg)
-          case Right(info) => Ok("hello " + info.emailAddress)
+          case Right(info) => Ok("hello " + info.emailAddress + " " + play.api.libs.Crypto.sign(info.emailAddress))
         }
 
       }
