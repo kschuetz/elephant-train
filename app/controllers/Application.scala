@@ -45,7 +45,8 @@ object Application extends Controller {
           case _ => 45
         }
 
-        None
+        val throttleUntil = DateTime.now + interval.seconds
+        Some(new java.sql.Timestamp(throttleUntil.getMillis))
       }
     }
 
