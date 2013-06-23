@@ -27,8 +27,10 @@ object Application extends Controller {
 
   def authenticate = Action { implicit request =>
 
-    val now = new java.util.Date()
-    val loginTime = new java.sql.Timestamp(now.getTime)
+    import com.github.nscala_time.time.Imports._
+
+    val now = DateTime.now
+    val loginTime = new java.sql.Timestamp(now.getMillis)
 
     def isThrottled(info: UserAuthResponse): Boolean = {
       info.loginDisallowedUntil.map { loginTime.before(_) } getOrElse(false)
