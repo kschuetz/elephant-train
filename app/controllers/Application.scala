@@ -6,7 +6,7 @@ import play.api.data.Forms._
 import play.api.mvc._
 import models.UserAuthResponse
 
-object Application extends Controller {
+object Application extends Controller with Secured {
 
   val loginDAO = models.slick.SlickLoginDAO
   
@@ -94,5 +94,10 @@ object Application extends Controller {
 
   def logout = TODO
 
+  def sandbox1 = Authenticated { user =>
+    Action { implicit request =>
+      Ok("hello " + user.userID.toString)
+    }
+  }
 
 }

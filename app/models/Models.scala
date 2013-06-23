@@ -13,4 +13,6 @@ case class UserAuthResponse(userID: java.util.UUID,
                             emailAddressVerified: Boolean)
 
 
-case class AuthenticatedUser(userID: java.util.UUID)
+case class AuthenticatedUser(userID: java.util.UUID,
+                             persistentLogin: Boolean,
+                             token: String)
