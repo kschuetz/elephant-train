@@ -29,6 +29,8 @@ object Application extends Controller {
 
     import com.github.nscala_time.time.Imports._
 
+    val invalidLoginErrorMessage = "Invalid email address or password"
+
     val now = DateTime.now
     val loginTime = new java.sql.Timestamp(now.getMillis)
 
@@ -60,23 +62,29 @@ object Application extends Controller {
       credentials => {
         val authInfo = loginDAO.userLoginByEmailAddress(credentials._1)
 
-        authInfo match {
+        val checkAuth = authInfo match {
           case Some(info) => {
-            if(isThrottled(info)) Redirect(routes.Application.login).flashing("error" -> "throttled")
+            if(isThrottled(info)) Left("Too many login attempts.  Please wait a moment before trying again.")//Redirect(routes.Application.login).flashing("error" -> "throttled")
             else {
               if(checkPassword(credentials._2, info.password)) {
                 loginDAO.updateSuccessForUser(info.userID, Some(loginTime))
-                Ok("hello " + info.emailAddress)
+                Right(info)
               } else {
                 val failedAttempts = info.failedLoginAttempts + 1
                 val throttleUntil = getThrottleTime(failedAttempts)
                 loginDAO.updateThrottlingForUser(info.userID, failedAttempts, throttleUntil)
-                Redirect(routes.Application.login).flashing("error" -> "NO WAY")
+                Left(invalidLoginErrorMessage)
               }
             }
           }
-          case _ => Redirect(routes.Application.login).flashing("error" -> "nope")
+          case _ => Left(invalidLoginErrorMessage)
         }
+
+        checkAuth match {
+          case Left(errorMsg) => Redirect(routes.Application.login).flashing("error" -> errorMsg)
+          case Right(info) => Ok("hello " + info.emailAddress)
+        }
+
       }
 
     )
