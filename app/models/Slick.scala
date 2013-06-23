@@ -39,7 +39,14 @@ object SlickLoginDAO {
 
   def updateThrottlingForUser(userID: java.util.UUID,
                               failedAttempts: Int,
-                              loginDisallowedUntil: Option[java.sql.Timestamp]) = ???
+                              loginDisallowedUntil: Option[java.sql.Timestamp]) = DB.withSession { implicit c =>
+    val q = for {
+      user <- LoginByEmailAddress if user.user_id is userID
+    } yield user.failed_login_attempts ~ user.login_disallowed_until
+
+    q.update((failedAttempts, loginDisallowedUntil))
+
+  }
 
   def updateSuccessForUser(userID: java.util.UUID,
                            loginTime: Option[java.sql.Timestamp]) = DB.withSession { implicit c =>
