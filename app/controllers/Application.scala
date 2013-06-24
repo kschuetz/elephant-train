@@ -26,7 +26,7 @@ object Application extends Controller with Secured {
     Ok(views.html.main("Login")(views.html.login(loginForm))).withSession("foo" -> "bar", "qwerty" -> "quux")
   }
 
-  def authenticate = Action { implicit request =>
+  def authenticate_old = Action { implicit request =>
 
     import com.github.nscala_time.time.Imports._
 
@@ -90,6 +90,26 @@ object Application extends Controller with Secured {
 
     )
 
+  }
+
+  private def loginErrorToString(errorType: core.UserAuthenticator.LoginError): String = {
+    import core.UserAuthenticator._
+
+    errorType match {
+      case InvalidCredentials => "Invalid credentials"
+      case TooManyAttempts => "Too many login attempts.  Please wait a moment before trying again."
+      case _ => "Unknown error"
+    }
+  }
+
+  def authenticate = Action { implicit request =>
+    loginForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.main("Login")(views.html.login(formWithErrors))),
+      credentials => core.UserAuthenticator.authenticate(credentials._1, credentials._2) match {
+        case Left(loginError) => Redirect(routes.Application.login).flashing("error" -> loginErrorToString(loginError))
+        case Right(userInfo) => Ok("hello " + userInfo.emailAddress)
+      }
+    )
   }
 
 
