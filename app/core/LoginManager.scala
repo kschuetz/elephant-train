@@ -31,7 +31,7 @@ object UserAuthenticator {
     passwordIn.isBcrypted(password)
   }
 
-  def userLogin(emailAddress: String, plainPassword: String): Either[LoginError, UserAuthResponse] = {
+  def authenticate(emailAddress: String, plainPassword: String): Either[LoginError, UserAuthResponse] = {
 
     val now = DateTime.now
     val loginTime = new java.sql.Timestamp(now.getMillis)
