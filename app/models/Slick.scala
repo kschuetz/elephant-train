@@ -74,9 +74,10 @@ object SlickLoginDAO {
                        row._4, None, row._5, row._6, row._7, row._8)
 
     }
-
-
-
   }
 
+
+
 }
+
+
