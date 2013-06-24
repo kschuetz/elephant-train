@@ -1,11 +1,10 @@
 package core
 
 import models.UserAuthResponse
-import models.slick
 
-object ThrottledLoginManager {
+object LoginManager {
 
-  val loginDAO = SlickLoginDAO
+  val loginDAO = models.slick.SlickLoginDAO
 
   case class LoginError(msg: String)
 
