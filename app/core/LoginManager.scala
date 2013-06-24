@@ -2,7 +2,7 @@ package core
 
 import models.UserAuthResponse
 
-object LoginManager {
+object UserAuthenticator {
 
   val loginDAO = models.slick.SlickLoginDAO
 
