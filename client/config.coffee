@@ -4,7 +4,9 @@ exports.config =
     public:   '../public'
     
   conventions:
-    ignored: /^vendor(\/|\\)styles(\/|\\)bootstrap/
+    ignored: /^vendor(\/|\\)styles(\/|\\)_bootstrap/
+  
+  
     
   files:
     javascripts:

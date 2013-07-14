@@ -89,7 +89,7 @@ window.require.register("config", function(exports, require, module) {
       "public": '../public'
     },
     conventions: {
-      ignored: /^vendor(\/|\\)styles(\/|\\)bootstrap/
+      ignored: /^vendor(\/|\\)styles(\/|\\)_bootstrap/
     },
     files: {
       javascripts: {
