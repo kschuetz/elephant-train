@@ -88,12 +88,18 @@ window.require.register("config", function(exports, require, module) {
     paths: {
       "public": '../public'
     },
+    conventions: {
+      ignored: /^vendor(\/|\\)styles(\/|\\)bootstrap/
+    },
     files: {
       javascripts: {
         joinTo: 'javascripts/app.js'
       },
       stylesheets: {
-        joinTo: 'stylesheets/main.css'
+        joinTo: 'stylesheets/main.css',
+        order: {
+          before: ['vendor/styles/style.less']
+        }
       },
       templates: {
         joinTo: 'app.js'
