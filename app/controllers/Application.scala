@@ -56,7 +56,9 @@ object Application extends Controller with Secured {
   }
 
   def sandbox2 = Action { implicit request =>
-    Ok(request.remoteAddress)
+    val remote = request.remoteAddress
+    val forwarded = request.headers.get("X-Forwarded-For").getOrElse("none")
+    Ok(s"remote: $remote\nforwarded: $forwarded")
   }
 
 }
