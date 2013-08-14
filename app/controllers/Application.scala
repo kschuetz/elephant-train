@@ -55,4 +55,8 @@ object Application extends Controller with Secured {
     }
   }
 
+  def sandbox2 = Action { implicit request =>
+    Ok(request.remoteAddress)
+  }
+
 }
